@@ -1,0 +1,174 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<title>DevOps Lab - Nandhan</title>
+<style>
+body { font-family: Arial; background:#0f172a; color:#e2e8f0; margin:20px;}
+h1,h2 { color:#38bdf8; }
+.card { background:#1e293b; padding:20px; margin-bottom:20px; border-radius:12px;}
+pre { background:#020617; color:#22c55e; padding:10px; overflow-x:auto;}
+.note { color:#facc15; }
+.error { color:#ef4444; }
+.fix { color:#22c55e; }
+.run { color:#38bdf8; }
+</style>
+</head>
+
+<body>
+
+<h1>🚀 DevOps Lab Experiments</h1>
+<p><b>Name:</b> Nandhan<br>
+<b>Repo:</b> https://github.com/Nandhannandhank/myproject</p>
+
+<!-- Q1 -->
+<div class="card">
+<h2>Q1 - Git Operations</h2>
+<p class="run">💻 Run in: VS Code Terminal</p>
+<pre>
+git init myproject
+cd myproject
+echo "# My DevOps Project" > README.md
+git add README.md
+git commit -m "Initial commit"
+
+git checkout -b feature/hello
+echo "Hello from feature branch" > hello.txt
+git add hello.txt
+git commit -m "feat: add hello"
+
+git push origin feature/hello
+git checkout main
+git merge feature/hello
+git push origin main
+</pre>
+<p class="error">❌ Error: Permission denied (publickey)</p>
+<p class="fix">✅ Fix: Use HTTPS instead of SSH</p>
+</div>
+
+<!-- Q2 -->
+<div class="card">
+<h2>Q2 - Docker Flask + Push</h2>
+<p class="run">💻 Run in: PowerShell / VS Code Terminal</p>
+<pre>
+docker build -t nandhannandhank/flask-app .
+docker run -d -p 5000:5000 flask-app
+docker login
+docker push nandhannandhank/flask-app
+</pre>
+<p class="error">❌ Error: docker not recognized</p>
+<p class="fix">✅ Fix: Install Docker Desktop</p>
+</div>
+
+<!-- Q3 -->
+<div class="card">
+<h2>Q3 - Monolithic Flask App</h2>
+<p class="run">💻 Run in: VS Code Terminal</p>
+<pre>
+python app.py
+</pre>
+<p class="note">Use browser or API tools to test endpoints</p>
+<p class="error">❌ Error: curl not working</p>
+<p class="fix">✅ Fix: Use Invoke-RestMethod in PowerShell</p>
+</div>
+
+<!-- Q4 -->
+<div class="card">
+<h2>Q4 - GitHub Actions Docker CI</h2>
+<p class="run">💻 Run in: VS Code + GitHub</p>
+<pre>
+.github/workflows/docker-publish.yml
+git push origin main
+</pre>
+<p class="error">❌ Error: workflow not running</p>
+<p class="fix">✅ Fix: File must be inside .github/workflows/</p>
+</div>
+
+<!-- Q5 -->
+<div class="card">
+<h2>Q5 - Jenkins Pipeline</h2>
+<p class="run">💻 Run in: PowerShell (Docker required)</p>
+<pre>
+docker run -d --name jenkins -p 8080:8080 jenkins/jenkins:lts
+docker exec -u root jenkins chmod 666 /var/run/docker.sock
+</pre>
+<p class="error">❌ Error: docker.sock permission denied</p>
+<p class="fix">✅ Fix: Give permission and restart Jenkins</p>
+</div>
+
+<!-- Q6 -->
+<div class="card">
+<h2>Q6 - Kubernetes</h2>
+<p class="run">💻 Run in: VS Code Terminal</p>
+<pre>
+kubectl create deployment myapp --image=nginx
+kubectl get pods
+kubectl logs &lt;pod-name&gt;
+</pre>
+<p class="error">❌ Error: used deployment name for logs</p>
+<p class="fix">✅ Fix: use pod name</p>
+<p class="note">Important: deployment ≠ pod</p>
+</div>
+
+<!-- Q7 -->
+<div class="card">
+<h2>Q7 - GitHub Actions Buildx</h2>
+<p class="run">💻 Run in: VS Code + GitHub</p>
+<pre>
+.github/workflows/build-push.yml
+git push origin main
+</pre>
+<p class="error">❌ Error: authentication failed</p>
+<p class="fix">✅ Fix: Use Docker Hub access token</p>
+</div>
+
+<!-- Q8 -->
+<div class="card">
+<h2>Q8 - Docker Flask</h2>
+<p class="run">💻 Run in: VS Code Terminal</p>
+<pre>
+docker build -t flask-container .
+docker run -d -p 5000:5000 flask-container
+docker ps
+</pre>
+</div>
+
+<!-- Q9 -->
+<div class="card">
+<h2>Q9 - Clone Modify Push</h2>
+<p class="run">💻 Run in: VS Code Terminal</p>
+<pre>
+git clone https://github.com/Nandhannandhank/myproject.git
+cd myproject
+echo "Updated content" >> README.md
+git add README.md
+git commit -m "docs: update README"
+git push origin main
+</pre>
+</div>
+
+<!-- Q10 -->
+<div class="card">
+<h2>Q10 - Python Test CI</h2>
+<p class="run">💻 Run in: VS Code + GitHub Actions</p>
+<pre>
+pytest test_app.py
+</pre>
+<p class="note">Expected Output: 2 tests passed ✔</p>
+</div>
+
+<!-- FINAL NOTES -->
+<div class="card">
+<h2>🔥 Final Important Points</h2>
+<ul>
+<li>Always prefer VS Code Terminal</li>
+<li>Use PowerShell only for Docker/Jenkins</li>
+<li>Use Access Token instead of password</li>
+<li>deployment ≠ pod</li>
+<li>logs require pod name</li>
+<li>Check errors carefully and fix step-by-step</li>
+</ul>
+</div>
+
+</body>
+</html>
