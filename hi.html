@@ -1,0 +1,254 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>MAD Lab - Shopping App</title>
+
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background: #f4f6f9;
+            padding: 30px;
+        }
+
+        .container {
+            max-width: 900px;
+            margin: auto;
+            background: white;
+            padding: 25px;
+            border-radius: 10px;
+        }
+
+        h1 {
+            color: #222;
+        }
+
+        .header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            gap: 10px;
+        }
+
+        button {
+            background: #2563eb;
+            color: white;
+            border: none;
+            padding: 12px 18px;
+            border-radius: 6px;
+            cursor: pointer;
+        }
+
+        button:hover {
+            background: #1d4ed8;
+        }
+
+        pre {
+            background: #1e1e1e;
+            color: #d4d4d4;
+            padding: 20px;
+            border-radius: 8px;
+            overflow-x: auto;
+            line-height: 1.5;
+            font-size: 14px;
+        }
+
+        .question {
+            background: #eff6ff;
+            padding: 15px;
+            border-left: 4px solid #2563eb;
+            margin-bottom: 20px;
+        }
+    </style>
+</head>
+
+<body>
+
+<div class="container">
+
+    <div class="header">
+        <h1>Experiment 3 - Shopping App</h1>
+        <button onclick="copyCode()" id="copyBtn">
+            Copy Code
+        </button>
+    </div>
+
+    <div class="question">
+        <h3>Question</h3>
+        <p>
+            Develop a shopping application using Kotlin and Jetpack Compose.
+            Display a list of products with name, price and category.
+            When a user clicks a product, open the Product Detail screen
+            using Navigation Compose and display the selected product details.
+        </p>
+    </div>
+
+    <h3>MainActivity.kt</h3>
+
+    <pre><code id="displayCode"></code></pre>
+
+    <textarea id="sourceCode" style="display:none;">
+package com.example.shoppingapp
+
+import android.os.Bundle
+import android.net.Uri
+import androidx.activity.ComponentActivity
+import androidx.activity.compose.setContent
+import androidx.compose.foundation.clickable
+import androidx.compose.foundation.layout.*
+import androidx.compose.foundation.lazy.LazyColumn
+import androidx.compose.foundation.lazy.items
+import androidx.compose.material3.*
+import androidx.compose.runtime.Composable
+import androidx.compose.ui.Modifier
+import androidx.compose.ui.unit.dp
+import androidx.navigation.NavType
+import androidx.navigation.compose.*
+import androidx.navigation.navArgument
+
+data class Product(
+    val name: String,
+    val price: Int,
+    val category: String
+)
+
+class MainActivity : ComponentActivity() {
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+        setContent {
+            ShoppingApp()
+        }
+    }
+}
+
+@Composable
+fun ShoppingApp() {
+
+    val navController = rememberNavController()
+
+    val products = listOf(
+        Product("Laptop", 50000, "Electronics"),
+        Product("Phone", 20000, "Electronics"),
+        Product("Shoes", 2000, "Fashion")
+    )
+
+    NavHost(
+        navController = navController,
+        startDestination = "list"
+    ) {
+
+        composable("list") {
+            ProductListScreen(products) { product ->
+
+                navController.navigate(
+                    "detail/${Uri.encode(product.name)}/${product.price}/${Uri.encode(product.category)}"
+                )
+            }
+        }
+
+        composable(
+            route = "detail/{name}/{price}/{category}",
+            arguments = listOf(
+                navArgument("name") { type = NavType.StringType },
+                navArgument("price") { type = NavType.StringType },
+                navArgument("category") { type = NavType.StringType }
+            )
+        ) { entry ->
+
+            ProductDetailScreen(
+                entry.arguments?.getString("name") ?: "",
+                entry.arguments?.getString("price") ?: "",
+                entry.arguments?.getString("category") ?: "",
+                onBack = { navController.popBackStack() }
+            )
+        }
+    }
+}
+
+@Composable
+fun ProductListScreen(
+    products: List<Product>,
+    onClick: (Product) -> Unit
+) {
+    Column(modifier = Modifier.padding(16.dp)) {
+
+        Text("Shopping App", style = MaterialTheme.typography.headlineMedium)
+
+        LazyColumn {
+            items(products) { product ->
+
+                Card(
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .padding(8.dp)
+                        .clickable { onClick(product) }
+                ) {
+                    Column(modifier = Modifier.padding(16.dp)) {
+                        Text(product.name)
+                        Text("Price: ₹${product.price}")
+                        Text("Category: ${product.category}")
+                    }
+                }
+            }
+        }
+    }
+}
+
+@Composable
+fun ProductDetailScreen(
+    name: String,
+    price: String,
+    category: String,
+    onBack: () -> Unit
+) {
+    Column(modifier = Modifier.padding(20.dp)) {
+
+        Text("Product Details", style = MaterialTheme.typography.headlineMedium)
+
+        Text("Name: $name")
+        Text("Price: ₹$price")
+        Text("Category: $category")
+
+        Button(onClick = onBack) {
+            Text("Back")
+        }
+    }
+}
+    </textarea>
+
+</div>
+
+<script>
+    const source = document.getElementById("sourceCode");
+    const display = document.getElementById("displayCode");
+
+    display.textContent = source.value.trim();
+
+    function copyCode() {
+        const btn = document.getElementById("copyBtn");
+
+        navigator.clipboard.writeText(source.value.trim())
+            .then(() => {
+                btn.textContent = "Copied!";
+                setTimeout(() => {
+                    btn.textContent = "Copy Code";
+                }, 2000);
+            })
+            .catch(() => {
+                source.style.display = "block";
+                source.select();
+                document.execCommand("copy");
+                source.style.display = "none";
+
+                btn.textContent = "Copied!";
+                setTimeout(() => {
+                    btn.textContent = "Copy Code";
+                }, 2000);
+            });
+    }
+</script>
+
+</body>
+</html>
